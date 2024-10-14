@@ -60,3 +60,13 @@ function clearScreen() {
     inputString = "";
     screen.innerText = "";
 }
+
+window.addEventListener("orientationchange", function () {
+    if (screen.orientation.type.startsWith("landscape")) {
+        try {
+            screen.orientation.lock("portrait");
+        } catch (error) {
+            console.log("Impossible de verrouiller l'orientation :", error);
+        }
+    }
+});
