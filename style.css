@@ -39,6 +39,25 @@ body {
     }
 }
 
+.blok,
+.end-blok {
+    display: flex;
+    position: relative;
+    background-color: #1c4cd1;
+    border: 4px solid #19337c;
+    border-radius: 5px;
+    color: #fff;
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+.end-blok {
+    display: none;
+}
+
 .screen {
     height: 100px;
     width: 100%;
