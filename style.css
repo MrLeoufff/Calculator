@@ -76,6 +76,20 @@ body {
     word-break: break-all;
 }
 
+.screen p {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+    max-width: 100%;
+    line-height: 1.2;
+}
+
+.screen.multi-line {
+    line-height: 1.2;
+    font-size: 28px;
+    height: auto;
+}
+
 .clear {
     height: 50px;
     width: 100%;

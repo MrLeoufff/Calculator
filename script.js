@@ -19,12 +19,18 @@ clearButton.addEventListener("click", () => {
     clearScreen();
 });
 
+
 function handleInput(value) {
     const operators = ["+", "-", "x", "/", "%", "√"];
     const lastChar = inputString[inputString.length - 1];
 
     // console.log("handleInput - value:", value);
     // console.log("resetOnNextInput avant:", resetOnNextInput);
+
+    if (inputString.length >= 30 && !operators.includes(value)) {
+        // console.log("Maximum de 30 chiffres atteint");
+        return;
+    }
 
     if (resetOnNextInput && !operators.includes(value)) {
         inputString = "";
@@ -58,8 +64,16 @@ function handleInput(value) {
         inputString += value;
     }
 
+    updateDisplay(inputString);
+    // display.innerText = formatNumberDisplay(inputString);
     // console.log("Updated inputString:", inputString);
-    display.innerText = inputString;
+}
+
+function formatNumberDisplay(numberString) {
+    if (numberString.length > 30) {
+        return numberString.slice(0, 30);
+    }
+    return numberString.replace(/(.{15})/g, "$1\n");
 }
 
 
@@ -87,6 +101,22 @@ function calculateResult() {
         inputString = "";
         // console.log("Error :", error);
     }
+}
+
+function checkLineOverflow() {
+    const screenElement = document.querySelector(".screen");
+
+    if (screenElement.scrollHeight > screenElement.clientHeight) {
+        screenElement.classList.add("multi-line");
+    } else {
+        screenElement.classList.remove("multi-line");
+    }
+}
+
+function updateDisplay(content) {
+    const screenElement = document.querySelector(".screen p");
+    screenElement.innerText = formatNumberDisplay(content);
+    checkLineOverflow();
 }
 
 // Gestion orientation de l'écran
