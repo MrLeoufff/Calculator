@@ -12,7 +12,7 @@ function clearScreen() {
     display.innerText = "0";
     resetOnNextInput = false;
     lastActionWasOperator = false;
-    console.log("Screen vide");
+    // console.log("Screen vide");
 }
 
 clearButton.addEventListener("click", () => {
@@ -23,25 +23,25 @@ function handleInput(value) {
     const operators = ["+", "-", "x", "/", "%", "√"];
     const lastChar = inputString[inputString.length - 1];
 
-    console.log("handleInput - value:", value);
-    console.log("resetOnNextInput avant:", resetOnNextInput);
+    // console.log("handleInput - value:", value);
+    // console.log("resetOnNextInput avant:", resetOnNextInput);
 
     if (resetOnNextInput && !operators.includes(value)) {
         inputString = "";
         resetOnNextInput = false;
-        console.log("Input reset");
+        // console.log("Input reset");
     }
 
     if (operators.includes(value)) {
         lastActionWasOperator = true;
-        console.log("Operator type:", value);
+        // console.log("Operator type:", value);
         resetOnNextInput = false;
     } else {
         lastActionWasOperator = false;
     }
 
     if (operators.includes(value) && operators.includes(lastChar)) {
-        console.log("Consecutive operators detecté, saisie ignorée");
+        // console.log("Consecutive operators detecté, saisie ignorée");
         return;
     }
 
@@ -58,7 +58,7 @@ function handleInput(value) {
         inputString += value;
     }
 
-    console.log("Updated inputString:", inputString);
+    // console.log("Updated inputString:", inputString);
     display.innerText = inputString;
 }
 
@@ -81,11 +81,11 @@ function calculateResult() {
         inputString = result.toString();
         resetOnNextInput = true;
         lastActionWasOperator = false;
-        console.log("Calcule ok, result:", result);
+        // console.log("Calcule ok, result:", result);
     } catch (error) {
         display.innerText = "Erreur";
         inputString = "";
-        console.log("Error :", error);
+        // console.log("Error :", error);
     }
 }
 
@@ -93,19 +93,19 @@ function calculateResult() {
 function requestFullScreen() {
     if (document.documentElement.requestFullscreen) {
         document.documentElement.requestFullscreen().catch((error) => {
-            console.log("Erreur lors de la demande de plein écran:", error);
+            // console.log("Erreur lors de la demande de plein écran:", error);
         });
     } else if (document.documentElement.mozRequestFullScreen) {
         document.documentElement.mozRequestFullScreen().catch((error) => {
-            console.log("Erreur lors de la demande de plein écran (Firefox):", error);
+            // console.log("Erreur lors de la demande de plein écran (Firefox):", error);
         });
     } else if (document.documentElement.webkitRequestFullscreen) {
         document.documentElement.webkitRequestFullscreen().catch((error) => {
-            console.log("Erreur lors de la demande de plein écran (Webkit):", error);
+            // console.log("Erreur lors de la demande de plein écran (Webkit):", error);
         });
     } else if (document.documentElement.msRequestFullscreen) {
         document.documentElement.msRequestFullscreen().catch((error) => {
-            console.log("Erreur lors de la demande de plein écran (IE/Edge):", error);
+            // console.log("Erreur lors de la demande de plein écran (IE/Edge):", error);
         });
     }
 }
@@ -113,19 +113,19 @@ function requestFullScreen() {
 function requestExitFullScreen() {
     if (document.exitFullscreen) {
         document.exitFullscreen().catch((error) => {
-            console.log("Erreur lors de la sortie du plein écran:", error);
+            // console.log("Erreur lors de la sortie du plein écran:", error);
         });
     } else if (document.mozCancelFullScreen) {
         document.mozCancelFullScreen().catch((error) => {
-            console.log("Erreur lors de la sortie du plein écran (Firefox):", error);
+            // console.log("Erreur lors de la sortie du plein écran (Firefox):", error);
         });
     } else if (document.webkitExitFullscreen) {
         document.webkitExitFullscreen().catch((error) => {
-            console.log("Erreur lors de la sortie du plein écran (Webkit):", error);
+            // console.log("Erreur lors de la sortie du plein écran (Webkit):", error);
         });
     } else if (document.msExitFullscreen) {
         document.msExitFullscreen().catch((error) => {
-            console.log("Erreur lors de la sortie du plein écran (IE/Edge):", error);
+            // console.log("Erreur lors de la sortie du plein écran (IE/Edge):", error);
         });
     }
 }
@@ -161,14 +161,14 @@ window.addEventListener("orientationchange", function () {
         if (window.screen.orientation.type.startsWith("landscape")) {
             try {
                 window.screen.orientation.lock("portrait").catch(error => {
-                    console.log("Verrouillage échoué :", error);
+                    // console.log("Verrouillage échoué :", error);
                 });
             } catch (error) {
-                console.log("Impossible de verrouiller l'orientation :", error);
+                // console.log("Impossible de verrouiller l'orientation :", error);
             }
         }
     } else {
-        console.log("Le verrouillage de l'orientation n'est pas supporté par ce navigateur.");
+        // console.log("Le verrouillage de l'orientation n'est pas supporté par ce navigateur.");
     }
 });
 
