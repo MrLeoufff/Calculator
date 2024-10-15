@@ -12,6 +12,7 @@ function clearScreen() {
     display.innerText = "0";
     resetOnNextInput = false;
     lastActionWasOperator = false;
+    console.log("Screen vide");
 }
 
 clearButton.addEventListener("click", () => {
@@ -22,18 +23,25 @@ function handleInput(value) {
     const operators = ["+", "-", "x", "/", "%", "√"];
     const lastChar = inputString[inputString.length - 1];
 
-    if (resetOnNextInput && !operators.includes(value) && !lastActionWasOperator) {
+    console.log("handleInput - value:", value);
+    console.log("resetOnNextInput avant:", resetOnNextInput);
+
+    if (resetOnNextInput && !operators.includes(value)) {
         inputString = "";
         resetOnNextInput = false;
+        console.log("Input reset");
     }
 
     if (operators.includes(value)) {
         lastActionWasOperator = true;
+        console.log("Operator type:", value);
+        resetOnNextInput = false;
     } else {
         lastActionWasOperator = false;
     }
 
     if (operators.includes(value) && operators.includes(lastChar)) {
+        console.log("Consecutive operators detecté, saisie ignorée");
         return;
     }
 
@@ -43,15 +51,17 @@ function handleInput(value) {
 
     if (value === "%") {
         inputString = (parseFloat(inputString) / 100).toString();
-        // display.innerText = inputString;
     } else if (value === "√") {
         inputString = Math.sqrt(parseFloat(inputString)).toString();
-        // display.innerText = inputString;
+        resetOnNextInput = true;
     } else {
         inputString += value;
     }
+
+    console.log("Updated inputString:", inputString);
     display.innerText = inputString;
 }
+
 
 buttons.forEach(button => {
     button.addEventListener("click", () => {
@@ -64,16 +74,6 @@ buttons.forEach(button => {
     });
 });
 
-// function formatNumberDisplay(numberString) {
-//     if (numberString.length > 15) {
-//         numberString = numberString.replace(/(.{15})/g, '$1<br>');
-//     }
-//     screen.innerHTML = numberString;
-// }
-
-// let largeNumber = '123456789012345678901234567890';
-// formatNumberDisplay(largeNumber);
-
 function calculateResult() {
     try {
         let result = eval(inputString);
@@ -81,9 +81,11 @@ function calculateResult() {
         inputString = result.toString();
         resetOnNextInput = true;
         lastActionWasOperator = false;
+        console.log("Calcule ok, result:", result);
     } catch (error) {
         display.innerText = "Erreur";
         inputString = "";
+        console.log("Error :", error);
     }
 }
 
@@ -172,13 +174,3 @@ window.addEventListener("orientationchange", function () {
 
 endBlok.style.display = 'none';
 
-
-// window.addEventListener("orientationchange", function () {
-//     if (window.screen.orientation.type.startsWith("landscape")) {
-//         try {
-//             window.screen.orientation.lock("portrait");
-//         } catch (error) {
-//             console.log("Impossible de verrouiller l'orientation :", error);
-//         }
-//     }
-// });
