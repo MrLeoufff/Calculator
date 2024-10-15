@@ -1,11 +1,57 @@
-let display = document.getElementById("screen").querySelector("p");
-let buttons = document.querySelectorAll("li");
-let clearButton = document.getElementById("clear");
+const display = document.getElementById("screen").querySelector("p");
+const buttons = document.querySelectorAll("li");
+const clearButton = document.getElementById("clear");
+const blok = document.querySelector('.blok');
+const endBlok = document.querySelector('.end-blok');
 let inputString = "";
+let resetOnNextInput = false;
+let lastActionWasOperator = false;
+
+function clearScreen() {
+    inputString = "";
+    display.innerText = "0";
+    resetOnNextInput = false;
+    lastActionWasOperator = false;
+}
 
 clearButton.addEventListener("click", () => {
     clearScreen();
 });
+
+function handleInput(value) {
+    const operators = ["+", "-", "x", "/", "%", "√"];
+    const lastChar = inputString[inputString.length - 1];
+
+    if (resetOnNextInput && !operators.includes(value) && !lastActionWasOperator) {
+        inputString = "";
+        resetOnNextInput = false;
+    }
+
+    if (operators.includes(value)) {
+        lastActionWasOperator = true;
+    } else {
+        lastActionWasOperator = false;
+    }
+
+    if (operators.includes(value) && operators.includes(lastChar)) {
+        return;
+    }
+
+    if (value === "x") {
+        value = "*";
+    }
+
+    if (value === "%") {
+        inputString = (parseFloat(inputString) / 100).toString();
+        // display.innerText = inputString;
+    } else if (value === "√") {
+        inputString = Math.sqrt(parseFloat(inputString)).toString();
+        // display.innerText = inputString;
+    } else {
+        inputString += value;
+    }
+    display.innerText = inputString;
+}
 
 buttons.forEach(button => {
     button.addEventListener("click", () => {
@@ -18,44 +64,27 @@ buttons.forEach(button => {
     });
 });
 
-function handleInput(value) {
-    const operators = ["+", "-", "x", "/", "%", "v"];
+// function formatNumberDisplay(numberString) {
+//     if (numberString.length > 15) {
+//         numberString = numberString.replace(/(.{15})/g, '$1<br>');
+//     }
+//     screen.innerHTML = numberString;
+// }
 
-    const lastChar = inputString[inputString.length - 1];
-    if (operators.includes(value) && operators.includes(lastChar)) {
-        return;
-    }
-
-    if (value === "x") {
-        value = "*";
-    }
-
-    if (value === "%") {
-        inputString = (parseFloat(inputString) / 100).toString();
-        display.innerText = inputString;
-    } else if (value === "v") {
-        inputString = Math.sqrt(parseFloat(inputString)).toString();
-        display.innerText = inputString;
-    } else {
-        inputString += value;
-        display.innerText = inputString;
-    }
-}
+// let largeNumber = '123456789012345678901234567890';
+// formatNumberDisplay(largeNumber);
 
 function calculateResult() {
     try {
         let result = eval(inputString);
         display.innerText = result;
         inputString = result.toString();
+        resetOnNextInput = true;
+        lastActionWasOperator = false;
     } catch (error) {
         display.innerText = "Erreur";
         inputString = "";
     }
-}
-
-function clearScreen() {
-    inputString = "";
-    display.innerText = "";
 }
 
 // Gestion orientation de l'écran
@@ -107,13 +136,20 @@ document.getElementById("exitFullscreen-btn").addEventListener("click", function
     requestExitFullScreen();
 })
 
-const blok = document.querySelector('.blok');
-const endBlok = document.querySelector('.end-blok');
-
 blok.addEventListener('click', function () {
     if (endBlok.style.display === 'none' || endBlok.style.display === '') {
         endBlok.style.display = 'block';
     } else {
+        endBlok.style.display = 'none';
+    }
+});
+
+document.addEventListener('fullscreenchange', function () {
+    if (document.fullscreenElement) {
+        blok.style.display = 'none';
+        endBlok.style.display = 'block';
+    } else {
+        blok.style.display = 'block';
         endBlok.style.display = 'none';
     }
 });
@@ -131,16 +167,6 @@ window.addEventListener("orientationchange", function () {
         }
     } else {
         console.log("Le verrouillage de l'orientation n'est pas supporté par ce navigateur.");
-    }
-});
-
-document.addEventListener('fullscreenchange', function () {
-    if (document.fullscreenElement) {
-        blok.style.display = 'none';
-        endBlok.style.display = 'block';
-    } else {
-        blok.style.display = 'block';
-        endBlok.style.display = 'none';
     }
 });
 
